@@ -8,7 +8,7 @@
 
 
 #include <opencv2/opencv.hpp>
-#include "lib/OpencvOp/OpencvTest.h"
+#include "lib/OpenCVOp/OpencvTest.h"
 #include <iostream>
 
 using namespace cv;

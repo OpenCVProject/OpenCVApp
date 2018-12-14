@@ -562,14 +562,6 @@ int OpencvTest::drawText(std::string path){
   
 
     randomLineDemo(src);
-    
-    
-    
-    
-   
-    
-    
-    
     return 0;
 }
 
@@ -578,7 +570,7 @@ int OpencvTest::drawText(std::string path){
  * 模糊操作
  */
 int OpencvTest::blurImage(std::string path){
-    cv::Mat src,dst,dst2;
+    cv::Mat src,dst,dst2,dst3;
     src = cv::imread(path);
     if(src.empty()){
         std::printf("could not load images...");
@@ -589,17 +581,94 @@ int OpencvTest::blurImage(std::string path){
     cv::imshow(input_win, src);
     
     
-    cv::blur(src, dst, cv::Size(11,11), cv::Point(-1, -1));
+//    cv::blur(src, dst, cv::Size(11,11), cv::Point(-1, -1));
+//    const char output_win[] = "output";
+//    cv::imshow(output_win, dst);
+//
+//
 
-    const char output_win[] = "output";
-    cv::imshow(output_win, dst);
-    
-    
-    cv::GaussianBlur(src, dst2, cv::Size(11,11), 11, 11);
+
+    //中值模糊 3-核大小必须为奇数 方便取中指
+    //作用: 1.椒盐噪声去噪点(去除斑点) 2.中值滤波后皮肤更光滑
+    cv::medianBlur(src, dst, 3);
+    const char medianBlur[] = "medianBlur";
+    cv::imshow(medianBlur, dst);
+
+
+    //双边模糊 15-卷积核 150-阈值(只处理大于阈值像素，可以提取更多的特征) 3-如果卷积核设为-1,那么卷积核的大小是根据这个值来设置的
+    //1.磨皮效果（对比高斯模糊双边模糊保留了边缘信息）
+    cv::bilateralFilter(src,dst2,15,100,5);
+    const char bilateralFilter[] = "bilateralFilter";
+    cv::imshow(bilateralFilter, dst);
+
+    //掩膜操作-提升对比度
+    cv::Mat resultImg;
+    cv::Mat kernel = (cv::Mat_<int>(3,3) << 0, -1, 0 ,-1, 5, -1, 0, -1, 0);
+    cv::filter2D(dst,resultImg, -1, kernel, cv::Point(-1, -1), 0);
+    const char filter2D[] = "filter2D";
+    cv::imshow(filter2D, resultImg);
+
+
+    //高斯模糊
+    cv::GaussianBlur(src, dst3, cv::Size(15,15), 5, 5);
     const char GaussianBlurt_win[] = "GaussianBlur";
-    cv::imshow(GaussianBlurt_win, dst2);
+    cv::imshow(GaussianBlurt_win, dst3);
+
     
    
     cv::waitKey();
     return 0;
 }
+
+
+
+/**
+ * 结构元素调整
+ */
+int element_size = 3;
+int max_size = 21;
+const char OUTPUT_WIN[] = "output";
+cv::Mat src, dst;
+
+void CallBack_Demo(int, void*){
+    int s = element_size * 2 + 1;
+    cv::Mat structureElement = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(s, s), cv::Point(-1,-1));
+    //膨胀
+    //cv::dilate(src, dst,structureElement, cv::Point(-1,-1), 1);
+    //腐蚀
+    cv::erode(src, dst,structureElement);
+    cv::imshow(OUTPUT_WIN, dst);
+}
+
+/**
+ * 腐蚀和膨胀
+ * 形态学基本操作：腐蚀、膨胀、开、闭
+ * 膨胀：取Ksize核下的最大值，替换锚点覆盖下像素
+ * 腐蚀：取Ksize核下的最小值，替换锚点覆盖下像素
+ *
+ * 腐蚀的用途：图像二值化后，需要提取大块的特征，用腐蚀手段将小的点去除
+ * cv::Point(-1, -1)就是中心像素
+ * @param path
+ * @return
+ */
+int OpencvTest::corrosionAndSwell(std::string path) {
+
+    src = cv::imread(path);
+    cv::cvtColor(src, src, CV_BGR2GRAY);
+
+    if(src.empty()) {
+        std::printf("could not load image....");
+        return -1;
+    }
+
+    const char input[] = "input";
+    cv::imshow(input, src);
+
+    cv::namedWindow(OUTPUT_WIN, CV_WINDOW_AUTOSIZE);
+
+    cv::createTrackbar("Element Size:", OUTPUT_WIN, &element_size, max_size, CallBack_Demo);
+
+    cv::waitKey();
+    return 0;
+}
+

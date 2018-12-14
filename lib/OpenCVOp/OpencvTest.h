@@ -20,5 +20,11 @@ class OpencvTest: public Base{
         int adjustImageLuminanceL(std::string path);
         int drawText(std::string path);
         int blurImage(std::string path);
+        /**
+         * 腐蚀和膨胀
+         * @param path
+         * @return
+         */
+        int corrosionAndSwell(std::string path);
 };
 

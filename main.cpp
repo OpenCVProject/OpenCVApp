@@ -28,8 +28,8 @@ int main(int argc, const char * argv[]) {
     //res = opencvTest->maskImage(imgPath);
     
     //res = opencvTest->matOp(imgPath);
-    string imgpath_pattern = "/Users/tonye/Downloads/智能安检-压力罐样本1204/罐子4/*.png";
-    res = opencvTest->readImgFiles(imgpath_pattern, "/Users/tonye/Downloads/004");
+//    string imgpath_pattern = "/Users/tonye/Downloads/智能安检-压力罐样本1204/罐子4/*.png";
+//    res = opencvTest->readImgFiles(imgpath_pattern, "/Users/tonye/Downloads/004");
     
     //res = opencvTest->imageOp(imgPath);
     
@@ -40,7 +40,9 @@ int main(int argc, const char * argv[]) {
     //res = opencvTest->drawText(imgPath);
     
     //res = opencvTest->blurImage(imgPath);
-    
+
+    //腐蚀和膨胀
+    res = opencvTest->corrosionAndSwell(imgPath);
     return res;
     
     

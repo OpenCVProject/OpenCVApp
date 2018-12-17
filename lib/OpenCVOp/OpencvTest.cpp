@@ -672,3 +672,110 @@ int OpencvTest::corrosionAndSwell(std::string path) {
     return 0;
 }
 
+/**
+ * 形态学操作
+ * @param paht
+ * @return
+ */
+int OpencvTest::morphologyOp(std::string path) {
+    cv::Mat src, dst;
+    src = cv::imread(path);
+    if(src.empty()){
+        std::printf("could not load image......");
+        return -1;
+    }
+
+    const char input[] = "input";
+    cv::imshow(input, src);
+
+
+    //开操作
+    //先腐蚀后膨胀，可以去掉小的对象 （获取去除碎点噪声）
+//    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(11, 11), cv::Point(-1, -1)); //定义结构元素
+//    cv::morphologyEx(src, dst, CV_MOP_OPEN, kernel);
+
+
+//    //闭操作
+//    //先膨胀后腐蚀，可以填充小洞
+//    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(11, 11), cv::Point(-1, -1)); //定义结构元素
+//    cv::morphologyEx(src, dst, CV_MOP_CLOSE, kernel);
+
+
+//    //形态学梯度
+//    //膨胀减去腐蚀
+//    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(11, 11), cv::Point(-1, -1)); //定义结构元素
+//    cv::morphologyEx(src, dst, CV_MOP_GRADIENT, kernel);
+
+
+//    //顶帽
+//    //原图像与开操作之间的差值图像 (二值图像 只获取碎点噪声)
+//    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(11, 11), cv::Point(-1, -1)); //定义结构元素
+//    cv::morphologyEx(src, dst, CV_MOP_TOPHAT, kernel);
+
+//    //黑帽
+//    //原图像与闭操作之间的差值图像 (二值图像 只获取碎点噪声)
+//    //作用：检测设备上的坏洞 1.先做闭操作将坏洞补齐来 2.然后和原图做差值把坏洞检测出来
+//    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(11, 11), cv::Point(-1, -1)); //定义结构元素
+//    cv::morphologyEx(src, dst, CV_MOP_BLACKHAT, kernel);
+//    const char output[] = "output";
+//    cv::imshow(output, dst);
+
+
+    /**
+     * 提取水平和垂直的直线
+     * 1. 输入彩色图像 imread
+     * 2. 转换灰度图像 cvtColor
+     * 3. 转换为二值图像 adaptiveThreshold
+     * 4. 定义结构元素
+     * 5. 开操作（腐蚀+膨胀）提取 水平与垂直线
+     */
+
+//    cv::Mat gray_src, binImg, resultImg;
+//    cv::cvtColor(src, gray_src, CV_BGR2GRAY);
+//    //灰度图取反后转二值化图， 背景是黑色的
+//    cv::adaptiveThreshold(~gray_src, binImg, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 15, -2);
+//
+//    //定义横竖的结构元素
+//    //水平结构元素
+//    cv::Mat hline = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(src.cols/16,1), cv::Point(-1,-1));
+//    //垂直结构元素
+//    cv::Mat vline = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(1,src.rows/16), cv::Point(-1,-1));
+//
+//    //先腐蚀和膨胀
+//    cv::Mat temp;
+//    cv::erode(binImg, temp, vline);
+//    cv::dilate(temp, resultImg, vline);
+//    //cv::morphologyEx(binImg, resultImg, CV_MOP_OPEN, vline);
+//    cv::bitwise_not(resultImg, resultImg);
+//    //输出图像更圆润
+//    cv::blur(resultImg, resultImg, cv::Size(3, 3), cv::Point(-1,-1));
+//    const char output[] = "output";
+//    cv::imshow(output, resultImg);
+
+    /**
+     * 去除干扰线
+     */
+    cv::Mat gray_src, binImg, resultImg;
+    cv::cvtColor(src, gray_src, CV_BGR2GRAY);
+    //灰度图取反后转二值化图， 背景是黑色的
+    cv::adaptiveThreshold(~gray_src, binImg, 255, CV_ADAPTIVE_THRESH_MEAN_C, CV_THRESH_BINARY, 15, -2);
+
+    //矩形结构元素
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(6, 6), cv::Point(-1,-1));
+    //cv::morphologyEx(binImg, resultImg, CV_MOP_OPEN, kernel);
+    cv::Mat temp;
+    cv::erode(binImg, temp, kernel);
+    cv::dilate(temp, resultImg, kernel);
+    cv::bitwise_not(resultImg, resultImg);
+    cv::blur(resultImg, resultImg, cv::Size(3, 3), cv::Point(-1,-1));
+
+    const char output[] = "output";
+    cv::imshow(output, resultImg);
+
+    cv::waitKey();
+
+
+
+}
+
+

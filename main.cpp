@@ -42,7 +42,11 @@ int main(int argc, const char * argv[]) {
     //res = opencvTest->blurImage(imgPath);
 
     //腐蚀和膨胀
-    res = opencvTest->corrosionAndSwell(imgPath);
+    //res = opencvTest->corrosionAndSwell(imgPath);
+
+    //形态学操作
+    std::string imgPath2 = "/Users/tonye/CLionProjects/CLionProjects-OpenCV/OpenCVApp/resources/zaodian.jpg";
+    res = opencvTest->morphologyOp(imgPath2);
     return res;
     
     

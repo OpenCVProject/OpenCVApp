@@ -26,5 +26,14 @@ class OpencvTest: public Base{
          * @return
          */
         int corrosionAndSwell(std::string path);
+
+        /**
+         * 形态学操作
+         * @param paht
+         * @return
+         */
+        int morphologyOp(std::string paht);
+
+
 };
 

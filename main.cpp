@@ -21,7 +21,7 @@ int main(int argc, const char * argv[]) {
     int res = 0;
 
     OpencvTest* opencvTest = new OpencvTest();
-    string imgPath = "/Users/tonye/CLionProjects/CLionProjects-Opencv/OpenCVApp/resources/timg.jpg";
+    //string imgPath = "/Users/tonye/CLionProjects/CLionProjects-Opencv/OpenCVApp/resources/timg.jpg";
 
     //res = opencvTest->getRGBscaleImage(imgPath);
     //res = opencvTest->drawCircleImage(imgPath);
@@ -45,10 +45,17 @@ int main(int argc, const char * argv[]) {
     //res = opencvTest->corrosionAndSwell(imgPath);
 
     //形态学操作
-    std::string imgPath2 = "/Users/tonye/CLionProjects/CLionProjects-OpenCV/OpenCVApp/resources/zaodian.jpg";
-    res = opencvTest->morphologyOp(imgPath2);
+//    std::string imgPath2 = "/Users/tonye/CLionProjects/CLionProjects-OpenCV/OpenCVApp/resources/zaodian.jpg";
+//    res = opencvTest->morphologyOp(imgPath2);
 
     //形态学操作应用-提取水平与垂直线
+//    string imgPath = "/Users/tonye/CLionProjects/CLionProjects-Opencv/OpenCVApp/resources/shuipingchuizhi2.jpg";
+//    res = opencvTest->morphologyOpApp(imgPath);
+
+    //图像金字塔-上采样与降采样
+    string path = "/Users/tonye/CLionProjects/CLionProjects-OpenCV/OpenCVApp/resources/timg.jpg";
+    res = opencvTest->imageSampling(path);
+
 
     return res;
     

@@ -9,8 +9,8 @@
 #include "OpencvTest.h"
 #include <opencv2/opencv.hpp>
 
-
-
+using namespace cv;
+using namespace std;
 
 int OpencvTest::getRGBscaleImage(std::string img)
 {
@@ -776,6 +776,93 @@ int OpencvTest::morphologyOp(std::string path) {
 
 
 
+}
+
+/**
+ * 形态学操作应用-提取水平和垂直线
+ * 输入彩色图像
+ * 转换为灰度图像
+ * 转换为二值图像
+ * 定义结构元素
+ * 开操作（腐蚀+膨胀）提取水平与垂直线
+ * @param path
+ * @return
+ */
+int OpencvTest::morphologyOpApp(std::string path) {
+    cv::Mat src, dst;
+    src = cv::imread(path);
+    if(!src.data){
+        printf("could not load image...\n");
+    }
+
+    char INPUT_WIN[] = "input image";
+    char OUTPUT_WIN[] = "result image";
+    cv::namedWindow(INPUT_WIN, CV_WINDOW_AUTOSIZE);
+    imshow(INPUT_WIN, src);
+
+    cv::Mat gary_src;
+    cvtColor(src, gary_src, CV_BGR2GRAY);
+    imshow("gary image", gary_src);
+
+    cv::Mat binImg;
+    adaptiveThreshold(~gary_src, binImg, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, cv::THRESH_BINARY, 15, -2);
+    imshow("binary image", binImg);
+
+    //结构元素
+    cv::Mat hline = getStructuringElement(MORPH_RECT, Size(src.cols/16, 1), Point(-1, -1));
+    cv::Mat vline = getStructuringElement(MORPH_RECT, Size(1, src.rows/16), Point(-1, -1));
+    Mat kernel = getStructuringElement(MORPH_RECT, Size(3,3), Point(-1, -1));
+
+    //开操作
+    Mat temp;
+    erode(binImg, temp, kernel);//腐蚀
+    dilate(temp, dst, kernel);//膨胀
+    //或者
+    //morphologyEx(binImg, dst, CV_MOP_OPEN, kernel); //开操作（腐蚀-膨胀）
+    bitwise_not(dst, dst);
+    blur(dst, dst, Size(1,1), Point(-1, -1)); //结果更圆滑
+
+    imshow("Final Result", dst);
+
+    cv::waitKey();
+
+}
+
+/**
+ * 图像金字塔-上采样与降采样
+ *
+ * @param path
+ * @return
+ */
+int OpencvTest::imageSampling(string path) {
+    Mat src, dst;
+    src = imread(path);
+    if(!src.data){
+        printf("count not load image...");
+    }
+
+    char INPUT_WIN[] = "input image";
+    namedWindow(INPUT_WIN, CV_WINDOW_AUTOSIZE);
+    imshow(INPUT_WIN, src);
+
+    /*
+     * 高斯金字塔
+     * 1. 对当前层进行高斯模糊
+     * 2. 删除当前层的偶数行与列
+     *
+     * 高斯不同 DOG
+     * 定义：就是把同一张图像在不同的参数下做高斯模糊之后的结果相减，得到输出图像。
+     *
+     * 高斯不同是图像的内在特征，在灰度图像增强、角点检测中经常用到
+     *
+     * 上采样 - 放大
+     * 蒋采样 - 缩小
+     *
+     */
+
+
+
+    waitKey(0);
 }
 
 

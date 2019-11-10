@@ -8,6 +8,9 @@
 #include <iostream>
 #include "Base.h"
 # pragma once
+
+using namespace std;
+
 class OpencvTest: public Base{
     public:
         int getRGBscaleImage(std::string img);
@@ -42,8 +45,11 @@ class OpencvTest: public Base{
          */
         int morphologyOpApp(std::string path);
 
-
-
+        /**
+         * 图像金字塔-上采样与降采样
+         * @return
+         */
+        int imageSampling(string path);
 
 };
 

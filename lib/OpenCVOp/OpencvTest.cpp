@@ -860,6 +860,23 @@ int OpencvTest::imageSampling(string path) {
      *
      */
 
+    // 上采样
+    pyrUp(src, dst, Size(src.cols*2, src.rows*2));
+    //imshow("up samping", dst);
+
+    //降采样
+    Mat s_down;
+    pyrDown(src, s_down, Size(src.cols/2, src.rows/2));
+    //imshow("down samping", s_down);
+
+    //高斯不同
+    Mat gary_src, g1, g2, dogImg;
+    cvtColor(src, gary_src, CV_BGR2GRAY);
+    GaussianBlur(gary_src, g1, Size(5,5), 0, 0);
+    GaussianBlur(g1, g2, Size(5, 5), 0, 0);
+    subtract(g1, g2, dogImg, Mat());
+    normalize(dogImg, dogImg, 255, 0, NORM_MINMAX); //归一化显示
+    imshow("dogimg", dogImg);
 
 
     waitKey(0);

@@ -16,6 +16,8 @@ add_executable(OpencvApp main.cpp ${SOURCE_FILES})
 
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
+
+
 target_link_libraries(OpencvApp ${OpenCV_LIBS})
 
 

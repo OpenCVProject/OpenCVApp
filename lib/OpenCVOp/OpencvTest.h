@@ -32,8 +32,20 @@ class OpencvTest: public Base{
          * @param paht
          * @return
          */
-        int morphologyOp(std::string paht);
+        int morphologyOp(std::string path);
+
+
+        /**
+         * 形态学操作与应用-提取水平与垂直线
+         * @param path
+         * @return
+         */
+        int morphologyOpApp(std::string path);
+
+
 
 
 };
+
+
 

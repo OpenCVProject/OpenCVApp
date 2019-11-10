@@ -47,8 +47,10 @@ int main(int argc, const char * argv[]) {
     //形态学操作
     std::string imgPath2 = "/Users/tonye/CLionProjects/CLionProjects-OpenCV/OpenCVApp/resources/zaodian.jpg";
     res = opencvTest->morphologyOp(imgPath2);
+
+    //形态学操作应用-提取水平与垂直线
+
     return res;
     
     
 }
-

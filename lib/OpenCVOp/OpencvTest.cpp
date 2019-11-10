@@ -11,6 +11,7 @@
 
 
 
+
 int OpencvTest::getRGBscaleImage(std::string img)
 {
     if(!checkImgData(img))
@@ -46,7 +47,6 @@ int OpencvTest::getRGBscaleImage(std::string img)
         
         cv::imshow("ImageShow", m);
         cv::waitKey();
-      
     }
     return 0;
 }
@@ -421,7 +421,7 @@ int OpencvTest::imageMixture(std::string path1,std::string path2){
 
 
 /**
- * 调整图像亮度和对比度
+     * 调整图像亮度和对比度
  */
 int OpencvTest::adjustImageLuminanceL(std::string path){
     
